@@ -29,7 +29,7 @@ export async function deleteFolder(id: string): Promise<void> {
 export async function createSong(
   folderId: string,
   title: string,
-  snippet: string,
+  snippet = '',
 ): Promise<string> {
   const id = newId()
   const now = Date.now()

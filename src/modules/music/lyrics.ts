@@ -27,7 +27,7 @@ export async function fetchLyrics(
     `- A snippet/line from the song (STRONGEST clue): "${snippet || '(not given)'}"`,
     '',
     'Instructions:',
-    '- Use both clues, but rely MAINLY on the snippet, since it is an actual line of the song. The name can be wrong — that is fine.',
+    '- If a snippet is given, it is the strongest clue. Otherwise, identify the song from the name (which may be approximate or misspelled).',
     '- Identify the single most likely real song. Be generous: if there is a plausible match, return it.',
     '- Line 1 of your answer: "Title — Artist" (the CORRECT title and artist you identified).',
     '- Line 2: blank.',

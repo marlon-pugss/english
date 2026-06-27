@@ -22,7 +22,6 @@ export function FolderView() {
   const songs = useLiveQuery(() => listSongs(folderId), [folderId])
 
   const [title, setTitle] = useState('')
-  const [snippet, setSnippet] = useState('')
 
   const folderName = folderId
     ? (folder?.name ?? 'Pasta')
@@ -30,9 +29,8 @@ export function FolderView() {
 
   async function addSong() {
     if (!title.trim()) return
-    const id = await createSong(folderId, title, snippet)
+    const id = await createSong(folderId, title)
     setTitle('')
-    setSnippet('')
     navigate(`/modules/music/song?id=${id}`)
   }
 
@@ -62,21 +60,17 @@ export function FolderView() {
 
       <section className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-ink-800 p-4">
         <h2 className="font-medium text-white">Adicionar música</h2>
-        <Field label="Nome da música" hint="Pode ser aproximado — não precisa ser exato.">
-          <Input
-            placeholder="Ex.: Bohemian Rhapsody"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </Field>
         <Field
-          label="Trecho ou refrão"
-          hint="O que mais ajuda a achar a música: cole uma linha real da letra (um verso que você lembra)."
+          label="Nome da música"
+          hint="Pode ser aproximado — dica: incluir o artista ajuda a IA a achar a música certa."
         >
           <Input
-            placeholder="Ex.: Is this the real life? Is this just fantasy?"
-            value={snippet}
-            onChange={(e) => setSnippet(e.target.value)}
+            placeholder="Ex.: Bohemian Rhapsody — Queen"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') void addSong()
+            }}
           />
         </Field>
         <div>
