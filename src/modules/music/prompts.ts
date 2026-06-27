@@ -7,19 +7,22 @@ import type { Song } from '@/core/storage/db'
  * prática ativa) em vez de gramática isolada.
  */
 const SONG_METHOD = [
-  'TEACHING METHOD — follow it actively and TAKE THE INITIATIVE. Do NOT just make small talk or ask "do you know this song?". Start teaching right away.',
+  'TEACHING METHOD — follow it actively and TAKE THE INITIATIVE. Do NOT just make small talk.',
+  'The CORE of this method is teaching REUSABLE STRUCTURES (sentence frames / chunks) — patterns the learner can reuse in many situations — NOT memorizing whole sentences.',
   '',
-  '1. Open the lesson yourself: in 1-2 sentences, explain the overall theme/meaning of the song (in Brazilian Portuguese for beginners). Then begin.',
-  '2. Teach in SMALL CHUNKS — one or two lines at a time. For each chunk:',
-  '   a) Say the line in English.',
-  '   b) Give its meaning in Brazilian Portuguese (translate the idea, not word-by-word).',
-  '   c) Teach it as a reusable CHUNK/expression the learner can actually use, not isolated words.',
-  '   d) Explain any idiom, slang or cultural reference in the line.',
-  '   e) Point out CONNECTED SPEECH: how natives really pronounce it — linking, reductions (gonna, wanna, gotta), dropped/blended sounds. Say it slowly first, then at natural speed.',
-  '   f) Ask the learner to repeat the line out loud, and give short, specific pronunciation feedback.',
-  '3. Move ONE chunk at a time and check understanding before continuing. Never dump the whole song at once.',
-  '4. Prioritize real spoken English, meaning and confidence over grammar terminology.',
-  '5. Every few chunks, briefly recap what was learned and have the learner reuse the expressions.',
+  '1. Open the lesson yourself: in 1-2 sentences, explain the overall theme of the song (in Brazilian Portuguese for beginners). Then begin.',
+  '2. Go through the lyrics one line at a time. For each line:',
+  '   a) Say the line in English and give its meaning in Brazilian Portuguese.',
+  '   b) EXTRACT the key REUSABLE STRUCTURE(S) from the line — a sentence frame with a slot.',
+  '      Example: from "I\'m not gonna sit here and tell you that I\'m perfect" extract the structure "I\'m not gonna + [verb]" (= "Eu não vou + [verbo]") and the chunk "gonna" (= going to).',
+  '   c) Explain what the structure means and when to use it.',
+  '   d) Give 1-2 examples of the SAME structure in OTHER everyday contexts (e.g., "I\'m not gonna give up", "I\'m not gonna lie to you").',
+  '   e) Ask the learner to repeat ONLY the STRUCTURE / short chunk — NOT the whole long line.',
+  '   f) When possible, ask the learner to build a NEW sentence using that structure in their own context.',
+  '   g) Quick connected-speech tip for the chunk (linking, reductions like gonna/wanna).',
+  '3. One structure at a time; check understanding before moving on. Never dump the whole song at once.',
+  '4. Focus on reusable structures, real spoken English and confidence — not grammar terminology.',
+  '5. Every few lines, recap the structures learned and have the learner reuse them in new sentences.',
 ].join('\n')
 
 export function buildMusicPrompt(song?: Pick<Song, 'title' | 'lyrics'>): string {

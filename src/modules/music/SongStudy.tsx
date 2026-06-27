@@ -130,7 +130,7 @@ export function SongStudy() {
               text: m.text,
             }))}
             kickoff="Vamos começar a aula desta música agora. Pode iniciar."
-            intro="O tutor vai te ensinar a letra: significado das frases, vocabulário, expressões e pronúncia — tudo por voz."
+            intro="O tutor ensina estruturas reutilizáveis da música (com significado, exemplos em outros contextos e pronúncia) e pede pra você repetir só a estrutura — tudo por voz."
           />
         )}
       </section>
