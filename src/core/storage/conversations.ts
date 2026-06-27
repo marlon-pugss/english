@@ -50,6 +50,14 @@ export async function listConversations(
   return scope ? all.filter((c) => c.scope === scope) : all
 }
 
+/** Conversas mais recentes de todos os módulos (para o atalho na Home). */
+export async function listRecentConversations(
+  limit = 5,
+): Promise<Conversation[]> {
+  const all = await db.conversations.orderBy('updatedAt').reverse().toArray()
+  return all.slice(0, limit)
+}
+
 export async function getMessages(conversationId: string): Promise<Message[]> {
   return db.messages
     .where('conversationId')

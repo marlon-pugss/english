@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { RouteObject } from 'react-router-dom'
+import type { Conversation } from '@/core/storage/db'
 
 /**
  * Contexto livre que um módulo passa ao construir o prompt do tutor.
@@ -39,4 +40,9 @@ export interface LearningModule {
    * neste módulo (foco, estilo de correção, etc.).
    */
   buildSystemPrompt: (ctx?: ModulePromptContext) => string
+  /**
+   * Monta o link para retomar uma conversa deste módulo (usado na Home).
+   * Se omitido, a conversa não aparece no atalho "continue de onde parou".
+   */
+  resumeHref?: (conversation: Conversation) => string
 }

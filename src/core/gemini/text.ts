@@ -1,4 +1,4 @@
-import { createGeminiClient } from './client'
+import { getGeminiClient } from './client'
 import { GEMINI_MODELS } from './models'
 
 /**
@@ -6,7 +6,7 @@ import { GEMINI_MODELS } from './models'
  * Não consome tokens e lança um erro se a chave for inválida.
  */
 export async function validateApiKey(apiKey: string): Promise<void> {
-  const ai = createGeminiClient(apiKey)
+  const ai = await getGeminiClient(apiKey)
   // Dispara a requisição; chave inválida resulta em erro (401/403).
   await ai.models.list()
 }
@@ -23,7 +23,7 @@ export async function generateText(
   prompt: string,
   opts: GenerateTextOptions = {},
 ): Promise<string> {
-  const ai = createGeminiClient(apiKey)
+  const ai = await getGeminiClient(apiKey)
   const res = await ai.models.generateContent({
     model: opts.model ?? GEMINI_MODELS.text,
     contents: prompt,

@@ -1,6 +1,6 @@
-import { GoogleGenAI, Modality } from '@google/genai'
 import type { LiveServerMessage, Session } from '@google/genai'
 import { AudioIO } from '@/core/audio/audioIO'
+import { loadGenAI } from './client'
 import { GEMINI_MODELS } from './models'
 
 export type LiveStatus =
@@ -62,6 +62,7 @@ export class LiveSessionManager {
   async start(opts: LiveStartOptions): Promise<void> {
     this.setStatus('connecting')
     try {
+      const { GoogleGenAI, Modality } = await loadGenAI()
       const ai = new GoogleGenAI({ apiKey: opts.apiKey })
       this.session = await ai.live.connect({
         model: opts.model ?? GEMINI_MODELS.live,

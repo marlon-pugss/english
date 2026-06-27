@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom'
-import { moduleRegistry } from '@/core/modules/registry'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { getModule, moduleRegistry } from '@/core/modules/registry'
+import { listRecentConversations } from '@/core/storage/conversations'
 
 export function Home() {
+  const recent = useLiveQuery(() => listRecentConversations(5), [])
+
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-2">
@@ -29,6 +33,36 @@ export function Home() {
           </Link>
         ))}
       </section>
+
+      {recent && recent.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm font-medium text-slate-400">
+            Continue de onde parou
+          </h2>
+          <ul className="flex flex-col gap-2">
+            {recent.map((c) => {
+              const mod = getModule(c.moduleId)
+              const href = mod?.resumeHref?.(c)
+              if (!href) return null
+              return (
+                <li key={c.id}>
+                  <Link
+                    to={href}
+                    className="flex items-center justify-between gap-2 rounded-xl border border-white/5 bg-ink-800 px-3 py-2.5 transition hover:border-brand-500/40 hover:bg-ink-700"
+                  >
+                    <span className="min-w-0 truncate text-sm text-slate-100">
+                      {c.title}
+                    </span>
+                    <span className="shrink-0 text-xs text-slate-500">
+                      {mod?.title}
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }

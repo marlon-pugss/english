@@ -34,4 +34,5 @@ export const musicModule: LearningModule = {
     { path: 'modules/music/song', element: <SongStudy /> },
   ],
   buildSystemPrompt: (ctx) => buildMusicPrompt({ title: ctx?.topic ?? '' }),
+  resumeHref: (c) => `/modules/music/song?id=${c.scope ?? ''}&c=${c.id}`,
 }

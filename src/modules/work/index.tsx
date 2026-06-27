@@ -32,4 +32,5 @@ export const workModule: LearningModule = {
     { path: 'modules/work/practice', element: <WorkPractice /> },
   ],
   buildSystemPrompt: (ctx) => buildWorkPrompt(ctx?.topic),
+  resumeHref: (c) => `/modules/work/practice?c=${c.id}`,
 }
