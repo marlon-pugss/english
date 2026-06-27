@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import { db, getKv, setKv } from '@/core/storage/db'
 import { decryptString, encryptString } from '@/core/crypto/crypto'
+import type { ProficiencyLevel } from '@/core/gemini/prompts'
+
+export type { ProficiencyLevel }
 
 /**
  * loading    — ainda lendo o estado do dispositivo
@@ -19,12 +22,14 @@ interface SettingsState {
   apiKey: string | null
   hasPin: boolean
   ttsProvider: TtsProvider
+  level: ProficiencyLevel
   init: () => Promise<void>
   saveApiKey: (key: string, pin?: string) => Promise<void>
   unlock: (pin: string) => Promise<boolean>
   lock: () => void
   removeApiKey: () => Promise<void>
   setTtsProvider: (p: TtsProvider) => Promise<void>
+  setLevel: (l: ProficiencyLevel) => Promise<void>
 }
 
 export const useSettings = create<SettingsState>((set) => ({
@@ -32,6 +37,7 @@ export const useSettings = create<SettingsState>((set) => ({
   apiKey: null,
   hasPin: false,
   ttsProvider: 'browser',
+  level: 'beginner',
 
   async init() {
     // Pede armazenamento persistente para reduzir o risco de o navegador
@@ -43,22 +49,19 @@ export const useSettings = create<SettingsState>((set) => ({
     }
 
     const ttsProvider = await getKv<TtsProvider>('ttsProvider', 'browser')
-    const secret = await db.secrets.get('gemini')
+    const level = await getKv<ProficiencyLevel>('level', 'beginner')
+    set({ ttsProvider, level })
 
+    const secret = await db.secrets.get('gemini')
     if (!secret) {
-      set({ status: 'onboarding', ttsProvider })
+      set({ status: 'onboarding' })
       return
     }
     if (secret.withPin) {
-      set({ status: 'locked', hasPin: true, ttsProvider })
+      set({ status: 'locked', hasPin: true })
       return
     }
-    set({
-      apiKey: secret.value ?? null,
-      hasPin: false,
-      status: 'ready',
-      ttsProvider,
-    })
+    set({ apiKey: secret.value ?? null, hasPin: false, status: 'ready' })
   },
 
   async saveApiKey(key, pin) {
@@ -102,5 +105,10 @@ export const useSettings = create<SettingsState>((set) => ({
   async setTtsProvider(p) {
     await setKv('ttsProvider', p)
     set({ ttsProvider: p })
+  },
+
+  async setLevel(l) {
+    await setKv('level', l)
+    set({ level: l })
   },
 }))

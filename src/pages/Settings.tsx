@@ -17,6 +17,8 @@ export function Settings() {
   const hasPin = useSettings((s) => s.hasPin)
   const ttsProvider = useSettings((s) => s.ttsProvider)
   const setTtsProvider = useSettings((s) => s.setTtsProvider)
+  const level = useSettings((s) => s.level)
+  const setLevel = useSettings((s) => s.setLevel)
   const saveApiKey = useSettings((s) => s.saveApiKey)
   const removeApiKey = useSettings((s) => s.removeApiKey)
   const lock = useSettings((s) => s.lock)
@@ -37,6 +39,31 @@ export function Settings() {
         onSave={saveApiKey}
         onLock={lock}
       />
+
+      <Card>
+        <h2 className="mb-1 font-medium text-white">Nível de inglês</h2>
+        <p className="mb-3 text-sm text-slate-400">
+          O tutor adapta o ritmo, o vocabulário e o apoio em português ao seu
+          nível.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              ['beginner', 'Iniciante'],
+              ['intermediate', 'Intermediário'],
+              ['advanced', 'Avançado'],
+            ] as const
+          ).map(([value, label]) => (
+            <SecondaryButton
+              key={value}
+              className={level === value ? 'border-brand-500 text-white' : ''}
+              onClick={() => void setLevel(value)}
+            >
+              {label}
+            </SecondaryButton>
+          ))}
+        </div>
+      </Card>
 
       <Card>
         <h2 className="mb-1 font-medium text-white">Voz das respostas</h2>

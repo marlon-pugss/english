@@ -1,7 +1,48 @@
-import type { LiveServerMessage, Session } from '@google/genai'
+import type { GoogleGenAI, LiveServerMessage, Session } from '@google/genai'
 import { AudioIO } from '@/core/audio/audioIO'
 import { loadGenAI } from './client'
 import { GEMINI_MODELS } from './models'
+
+/** Log apenas em desenvolvimento (mantém o console limpo em produção). */
+const dlog = (...args: unknown[]) => {
+  if (import.meta.env.DEV) console.log('[Live]', ...args)
+}
+
+/**
+ * Descobre automaticamente um modelo Live válido para a chave do usuário.
+ *
+ * Os nomes dos modelos Live mudam e variam por conta/região, então listamos
+ * os modelos disponíveis e escolhemos um que suporte `bidiGenerateContent`.
+ * O resultado é cacheado entre conexões.
+ */
+let cachedLiveModel: string | null = null
+
+function pickLiveModel(names: string[]): string | undefined {
+  const score = (n: string) =>
+    (n.includes('live') ? 4 : 0) +
+    (n.includes('native-audio') ? 3 : 0) +
+    (n.includes('flash') ? 2 : 0) +
+    (n.includes('2.5') ? 1 : 0)
+  return [...names].sort((a, b) => score(b) - score(a))[0]
+}
+
+async function resolveLiveModel(ai: GoogleGenAI): Promise<string> {
+  if (cachedLiveModel) return cachedLiveModel
+  const candidates: string[] = []
+  try {
+    const pager = await ai.models.list()
+    for await (const m of pager) {
+      if (m.supportedActions?.includes('bidiGenerateContent') && m.name) {
+        candidates.push(m.name.replace(/^models\//, ''))
+      }
+    }
+  } catch (e) {
+    console.warn('[Live] falha ao listar modelos:', e)
+  }
+  dlog('modelos com bidiGenerateContent:', candidates)
+  cachedLiveModel = pickLiveModel(candidates) ?? GEMINI_MODELS.live
+  return cachedLiveModel
+}
 
 export type LiveStatus =
   | 'idle'
@@ -64,16 +105,30 @@ export class LiveSessionManager {
     try {
       const { GoogleGenAI, Modality } = await loadGenAI()
       const ai = new GoogleGenAI({ apiKey: opts.apiKey })
+      const model = opts.model ?? (await resolveLiveModel(ai))
+      dlog('conectando com modelo', model)
       this.session = await ai.live.connect({
-        model: opts.model ?? GEMINI_MODELS.live,
+        model,
         callbacks: {
+          onopen: () => dlog('websocket aberto'),
           onmessage: (m: LiveServerMessage) => this.handleMessage(m),
           onerror: (e: ErrorEvent) => {
+            console.error('[Live] erro:', e.message, e)
             this.cb.onError?.(e.message || 'Erro na conexão de voz.')
             this.setStatus('error')
           },
-          onclose: () => {
+          onclose: (e: CloseEvent) => {
+            dlog('websocket fechado:', e.code, e.reason)
+            // Fechamento anormal: mostra o motivo do servidor na tela.
+            if (e.code !== 1000 && this.status !== 'error') {
+              this.cb.onError?.(
+                `Conexão encerrada pelo servidor (código ${e.code}).${
+                  e.reason ? ` Motivo: ${e.reason}` : ''
+                }`,
+              )
+            }
             if (this.status !== 'error') this.setStatus('closed')
+            void this.audio.close()
           },
         },
         config: {
@@ -85,7 +140,8 @@ export class LiveSessionManager {
       })
 
       await this.audio.startInput((b64) => {
-        this.session?.sendRealtimeInput({
+        if (this.status !== 'active' || !this.session) return
+        this.session.sendRealtimeInput({
           media: { data: b64, mimeType: 'audio/pcm;rate=16000' },
         })
       })

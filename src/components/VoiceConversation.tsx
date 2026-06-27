@@ -4,6 +4,8 @@ import {
   type UIMessage,
 } from '@/core/live/useLiveConversation'
 import type { LiveStatus } from '@/core/gemini/live'
+import { useSettings } from '@/core/settings/store'
+import { levelInstruction } from '@/core/gemini/prompts'
 import { Alert, Button, DangerButton, SecondaryButton } from '@/components/ui'
 
 interface VoiceConversationProps {
@@ -25,6 +27,7 @@ const STATUS_LABEL: Record<LiveStatus, string> = {
 }
 
 export function VoiceConversation(props: VoiceConversationProps) {
+  const level = useSettings((s) => s.level)
   const {
     status,
     messages,
@@ -35,7 +38,10 @@ export function VoiceConversation(props: VoiceConversationProps) {
     start,
     stop,
     toggleMic,
-  } = useLiveConversation(props)
+  } = useLiveConversation({
+    ...props,
+    systemInstruction: `${props.systemInstruction}\n\n${levelInstruction(level)}`,
+  })
 
   const scrollRef = useRef<HTMLDivElement>(null)
   useEffect(() => {

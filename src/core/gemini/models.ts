@@ -1,13 +1,13 @@
 /**
  * Nomes dos modelos Gemini usados no app, centralizados para facilitar troca.
  *
- * Os nomes da família Live (áudio nativo) mudam com alguma frequência. Se a
- * conversa por voz não conectar, ajuste `live` aqui pelo nome retornado em
- * Configurações > listar modelos (ou na documentação do Google AI Studio).
+ * O modelo Live é descoberto automaticamente em tempo de execução a partir dos
+ * modelos disponíveis para a chave do usuário (ver resolveLiveModel em live.ts).
+ * O valor abaixo é apenas um FALLBACK caso a listagem de modelos falhe.
  */
 export const GEMINI_MODELS = {
   /** Modelo de texto rápido/barato: buscar letras, explicações, validação. */
   text: 'gemini-2.5-flash',
-  /** Modelo de áudio nativo para a Live API (conversa por voz em tempo real). */
-  live: 'gemini-live-2.5-flash-preview',
+  /** Fallback do modelo Live (o app tenta detectar o correto automaticamente). */
+  live: 'gemini-2.0-flash-live-001',
 } as const

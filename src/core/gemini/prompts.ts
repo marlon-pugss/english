@@ -1,3 +1,17 @@
+export type ProficiencyLevel = 'beginner' | 'intermediate' | 'advanced'
+
+/** Instrução que adapta o tutor ao nível do aluno. */
+export function levelInstruction(level: ProficiencyLevel): string {
+  switch (level) {
+    case 'beginner':
+      return 'The learner is a BEGINNER in English. Speak slowly, with short and simple sentences and basic vocabulary. Explain and reassure in Brazilian Portuguese whenever it helps understanding, then repeat the key phrase in English. Correct gently, one small thing at a time, and give lots of encouragement.'
+    case 'intermediate':
+      return 'The learner is at an INTERMEDIATE level. Use clear, natural English at a moderate pace. Stay mostly in English, using Brazilian Portuguese only when truly necessary. Give concise corrections.'
+    case 'advanced':
+      return 'The learner is ADVANCED. Speak naturally at a normal pace and stay in English. Give nuanced feedback on grammar, vocabulary and pronunciation.'
+  }
+}
+
 export interface TutorPromptOptions {
   /** Nome/contexto do módulo, em inglês (vai dentro do prompt do modelo). */
   moduleTitle: string
