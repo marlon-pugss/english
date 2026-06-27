@@ -5,9 +5,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'node:path'
 
 // Nome do repositório no GitHub Pages. Em produção o app é servido em
-// https://<usuario>.github.io/english-voice-coach/ — por isso o base com subpasta.
+// https://<usuario>.github.io/english/ — por isso o base com subpasta.
 // Se você publicar em domínio próprio ou em user-site, troque para '/'.
-const REPO_BASE = '/english-voice-coach/'
+const REPO_BASE = '/english/'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({

@@ -73,21 +73,21 @@ npm run lint
 
 O projeto já vem com um workflow do GitHub Actions (`.github/workflows/deploy.yml`) que builda e publica automaticamente.
 
-1. Crie um repositório no GitHub chamado **`english-voice-coach`** e suba o código:
+1. Crie um repositório no GitHub e suba o código:
    ```bash
-   git remote add origin https://github.com/<seu-usuario>/english-voice-coach.git
+   git remote add origin git@github.com:<seu-usuario>/<seu-repo>.git
    git push -u origin main
    ```
 2. No GitHub, vá em **Settings → Pages** e em **"Build and deployment" → Source** selecione **"GitHub Actions"**.
 3. A cada `push` na branch `main`, o app é publicado em:
-   `https://<seu-usuario>.github.io/english-voice-coach/`
+   `https://<seu-usuario>.github.io/<seu-repo>/`
 
 ### Se o nome do repositório for diferente
 
-O caminho base é configurado em `vite.config.ts`:
+O caminho base é configurado em `vite.config.ts` (atualmente `'/english/'`):
 
 ```ts
-const REPO_BASE = '/english-voice-coach/'
+const REPO_BASE = '/english/'
 ```
 
 Troque para `/<nome-do-seu-repo>/`. Se você usar **domínio próprio** ou um **user/organization site** (`<usuario>.github.io`), use `'/'`.
