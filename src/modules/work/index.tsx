@@ -1,6 +1,7 @@
-import { ComingSoon } from '@/components/ComingSoon'
-import { buildBaseTutorPrompt } from '@/core/gemini/prompts'
 import type { LearningModule } from '@/core/modules/types'
+import { WorkHome } from './WorkHome'
+import { WorkPractice } from './WorkPractice'
+import { buildWorkPrompt } from './scenarios'
 
 const WorkIcon = (
   <svg
@@ -27,21 +28,8 @@ export const workModule: LearningModule = {
   icon: WorkIcon,
   path: 'modules/work',
   routes: [
-    {
-      path: 'modules/work',
-      element: (
-        <ComingSoon
-          title="Situações de Trabalho"
-          description="Simulações de situações reais do dia a dia de um desenvolvedor Salesforce, em inglês."
-        />
-      ),
-    },
+    { path: 'modules/work', element: <WorkHome /> },
+    { path: 'modules/work/practice', element: <WorkPractice /> },
   ],
-  buildSystemPrompt: (ctx) =>
-    buildBaseTutorPrompt({
-      moduleTitle: 'Workplace English for a Salesforce developer',
-      focus:
-        ctx?.topic ??
-        'real day-to-day work situations: daily standups, code reviews, explaining technical solutions, and meetings with stakeholders. Role-play these scenarios and stay in character.',
-    }),
+  buildSystemPrompt: (ctx) => buildWorkPrompt(ctx?.topic),
 }
