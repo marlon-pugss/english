@@ -4,7 +4,7 @@ export type ProficiencyLevel = 'beginner' | 'intermediate' | 'advanced'
 export function levelInstruction(level: ProficiencyLevel): string {
   switch (level) {
     case 'beginner':
-      return 'The learner is a BEGINNER in English. Speak slowly, with short and simple sentences and basic vocabulary. Explain and reassure in Brazilian Portuguese whenever it helps understanding, then repeat the key phrase in English. Correct gently, one small thing at a time, and give lots of encouragement.'
+      return 'The learner is a BEGINNER in English. ALWAYS give your explanations, instructions, praise and feedback in Brazilian Portuguese — keep speaking Portuguese the whole time. Use English ONLY for the specific words, phrases or example sentences being taught, and right after, say what they mean in Portuguese. NEVER switch to speaking mostly in English, even when the learner gets something right (just praise in Portuguese and continue). Speak slowly, use short simple sentences, correct gently one small thing at a time, and be very encouraging.'
     case 'intermediate':
       return 'The learner is at an INTERMEDIATE level. Use clear, natural English at a moderate pace. Stay mostly in English, using Brazilian Portuguese only when truly necessary. Give concise corrections.'
     case 'advanced':

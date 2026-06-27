@@ -58,7 +58,7 @@ export function VoiceConversation(props: VoiceConversationProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
         <span
           className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ${
             status === 'active'
@@ -73,11 +73,6 @@ export function VoiceConversation(props: VoiceConversationProps) {
           )}
           {STATUS_LABEL[status]}
         </span>
-        {status === 'active' && (
-          <SecondaryButton className="px-3 py-1.5 text-sm" onClick={toggleMic}>
-            {micEnabled ? 'Silenciar mic' : 'Ativar mic'}
-          </SecondaryButton>
-        )}
       </div>
 
       {error && <Alert>{error}</Alert>}
@@ -107,13 +102,20 @@ export function VoiceConversation(props: VoiceConversationProps) {
             <MicIcon /> Iniciar conversa
           </Button>
         ) : (
-          <DangerButton
-            className="px-6 py-3"
-            disabled={status === 'connecting'}
-            onClick={() => void stop()}
-          >
-            {status === 'connecting' ? 'Conectando…' : 'Encerrar conversa'}
-          </DangerButton>
+          <>
+            {status === 'active' && (
+              <SecondaryButton className="px-4 py-3" onClick={toggleMic}>
+                {micEnabled ? 'Silenciar mic' : 'Ativar mic'}
+              </SecondaryButton>
+            )}
+            <DangerButton
+              className="px-6 py-3"
+              disabled={status === 'connecting'}
+              onClick={() => void stop()}
+            >
+              {status === 'connecting' ? 'Conectando…' : 'Encerrar conversa'}
+            </DangerButton>
+          </>
         )}
       </div>
     </div>
