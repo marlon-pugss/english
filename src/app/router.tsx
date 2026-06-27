@@ -1,5 +1,5 @@
 import { createHashRouter } from 'react-router-dom'
-import { AppLayout } from './AppLayout'
+import { AppGate } from './AppGate'
 import { Home } from '@/pages/Home'
 import { Settings } from '@/pages/Settings'
 import { moduleRegistry } from '@/core/modules/registry'
@@ -13,7 +13,7 @@ import { moduleRegistry } from '@/core/modules/registry'
 export const router = createHashRouter([
   {
     path: '/',
-    element: <AppLayout />,
+    element: <AppGate />,
     children: [
       { index: true, element: <Home /> },
       ...moduleRegistry.flatMap((m) => m.routes),
