@@ -1,6 +1,8 @@
-import { ComingSoon } from '@/components/ComingSoon'
-import { buildBaseTutorPrompt } from '@/core/gemini/prompts'
 import type { LearningModule } from '@/core/modules/types'
+import { MusicHome } from './MusicHome'
+import { FolderView } from './FolderView'
+import { SongStudy } from './SongStudy'
+import { buildMusicPrompt } from './prompts'
 
 const MusicIcon = (
   <svg
@@ -27,21 +29,9 @@ export const musicModule: LearningModule = {
   icon: MusicIcon,
   path: 'modules/music',
   routes: [
-    {
-      path: 'modules/music',
-      element: (
-        <ComingSoon
-          title="Músicas"
-          description="Crie pastas, adicione músicas pelo nome e um trecho, e estude a letra com a IA."
-        />
-      ),
-    },
+    { path: 'modules/music', element: <MusicHome /> },
+    { path: 'modules/music/folder', element: <FolderView /> },
+    { path: 'modules/music/song', element: <SongStudy /> },
   ],
-  buildSystemPrompt: (ctx) =>
-    buildBaseTutorPrompt({
-      moduleTitle: 'Learning English through songs',
-      focus:
-        ctx?.topic ??
-        'teach the lyrics of a song, explain passages, vocabulary and idiomatic expressions, and practice them with the learner.',
-    }),
+  buildSystemPrompt: (ctx) => buildMusicPrompt({ title: ctx?.topic ?? '' }),
 }

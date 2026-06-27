@@ -25,10 +25,10 @@ export interface Folder {
   createdAt: number
 }
 
-/** Uma música cadastrada pelo usuário. */
+/** Uma música cadastrada pelo usuário. `folderId` vazio ('') = sem pasta. */
 export interface Song {
   id: string
-  folderId: string | null
+  folderId: string
   title: string
   snippet: string
   lyrics?: string
