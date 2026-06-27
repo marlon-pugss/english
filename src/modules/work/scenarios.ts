@@ -57,11 +57,22 @@ export function getWorkScenario(id: string | null): WorkScenario | undefined {
   return id ? WORK_SCENARIOS.find((s) => s.id === id) : undefined
 }
 
+const WORK_COACHING = [
+  'COACHING DURING THE ROLE-PLAY — the learner often does not know what to say in English (especially as a beginner). So you are BOTH the role-play character AND a supportive coach:',
+  '- Stay in character for the scenario, but never leave the learner stuck.',
+  '- EVERY time you ask the learner to speak, also OFFER 1-2 ready-to-use example answers or sentence starters in English that they could say. For beginners, add the Brazilian Portuguese meaning of each example.',
+  '  Example: ask "How is your task going?" and then suggest: you can say "I\'m working on X, I should finish it today" (= "Estou trabalhando em X, devo terminar hoje").',
+  '- Suggest useful expressions and vocabulary for this kind of meeting.',
+  '- After the learner speaks, gently correct and show a more natural way to say it when helpful.',
+  '- Keep turns short and encouraging; one step at a time.',
+].join('\n')
+
 export function buildWorkPrompt(topic?: string): string {
-  return buildBaseTutorPrompt({
+  const base = buildBaseTutorPrompt({
     moduleTitle: 'Workplace English for a Salesforce developer',
     focus:
       topic ??
       'real day-to-day work situations: daily standups, code reviews, explaining technical solutions, and meetings with stakeholders. Role-play these scenarios and stay in character.',
   })
+  return `${base}\n\n${WORK_COACHING}`
 }

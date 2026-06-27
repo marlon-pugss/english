@@ -56,6 +56,8 @@ export function WorkPractice() {
         scope={scenario.id}
         title={scenario.title}
         systemInstruction={buildWorkPrompt(scenario.prompt)}
+        kickoff="Vamos começar a simulação. Apresente o cenário e já me dê exemplos do que eu posso falar."
+        intro="O tutor faz o role-play e, sempre que pedir pra você falar, sugere frases prontas (com tradução) pra você não travar."
       />
     </div>
   )
