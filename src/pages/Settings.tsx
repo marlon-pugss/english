@@ -53,15 +53,14 @@ export function Settings() {
               ['intermediate', 'Intermediário'],
               ['advanced', 'Avançado'],
             ] as const
-          ).map(([value, label]) => (
-            <SecondaryButton
-              key={value}
-              className={level === value ? 'border-brand-500 text-white' : ''}
-              onClick={() => void setLevel(value)}
-            >
-              {label}
-            </SecondaryButton>
-          ))}
+          ).map(([value, label]) => {
+            const Btn = level === value ? Button : SecondaryButton
+            return (
+              <Btn key={value} onClick={() => void setLevel(value)}>
+                {label}
+              </Btn>
+            )
+          })}
         </div>
       </Card>
 
@@ -72,22 +71,19 @@ export function Settings() {
           voz usada para ler textos (letras, explicações) em voz alta.
         </p>
         <div className="flex gap-2">
-          <SecondaryButton
-            className={
-              ttsProvider === 'browser' ? 'border-brand-500 text-white' : ''
-            }
-            onClick={() => void setTtsProvider('browser')}
-          >
-            Voz do navegador
-          </SecondaryButton>
-          <SecondaryButton
-            className={
-              ttsProvider === 'gemini' ? 'border-brand-500 text-white' : ''
-            }
-            onClick={() => void setTtsProvider('gemini')}
-          >
-            Voz do Gemini
-          </SecondaryButton>
+          {(
+            [
+              ['browser', 'Voz do navegador'],
+              ['gemini', 'Voz do Gemini'],
+            ] as const
+          ).map(([value, label]) => {
+            const Btn = ttsProvider === value ? Button : SecondaryButton
+            return (
+              <Btn key={value} onClick={() => void setTtsProvider(value)}>
+                {label}
+              </Btn>
+            )
+          })}
         </div>
       </Card>
 
