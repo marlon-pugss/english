@@ -129,7 +129,8 @@ export function SongStudy() {
               role: m.role,
               text: m.text,
             }))}
-            intro="Peça para o tutor te ensinar a letra, explicar trechos, vocabulário e expressões — tudo por voz."
+            kickoff="Vamos começar a aula desta música agora. Pode iniciar."
+            intro="O tutor vai te ensinar a letra: significado das frases, vocabulário, expressões e pronúncia — tudo por voz."
           />
         )}
       </section>

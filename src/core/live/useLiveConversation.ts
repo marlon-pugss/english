@@ -17,6 +17,8 @@ export interface UseLiveConversationOptions {
   systemInstruction: string
   existingConversationId?: string
   initialMessages?: UIMessage[]
+  /** mensagem inicial para o tutor começar sozinho (só em conversas novas) */
+  kickoff?: string
 }
 
 export function useLiveConversation(opts: UseLiveConversationOptions) {
@@ -78,6 +80,8 @@ export function useLiveConversation(opts: UseLiveConversationOptions) {
     await manager.start({
       apiKey,
       systemInstruction: optsRef.current.systemInstruction,
+      // kickoff só em conversa nova (não ao retomar uma existente)
+      kickoff: convIdRef.current ? undefined : optsRef.current.kickoff,
     })
   }, [])
 

@@ -71,6 +71,8 @@ export interface LiveStartOptions {
   apiKey: string
   systemInstruction: string
   model?: string
+  /** mensagem inicial (turno do usuário) para o tutor começar sozinho */
+  kickoff?: string
 }
 
 function errMessage(e: unknown): string {
@@ -147,6 +149,18 @@ export class LiveSessionManager {
       })
 
       this.setStatus('active')
+
+      // Faz o tutor começar a aula sozinho, sem esperar o usuário falar.
+      if (opts.kickoff && this.session) {
+        try {
+          this.session.sendClientContent({
+            turns: opts.kickoff,
+            turnComplete: true,
+          })
+        } catch {
+          /* ignorado */
+        }
+      }
     } catch (e) {
       this.cb.onError?.(errMessage(e))
       this.setStatus('error')

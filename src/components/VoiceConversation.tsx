@@ -16,6 +16,8 @@ interface VoiceConversationProps {
   existingConversationId?: string
   initialMessages?: UIMessage[]
   intro?: string
+  /** mensagem inicial para o tutor começar a aula sozinho */
+  kickoff?: string
 }
 
 const STATUS_LABEL: Record<LiveStatus, string> = {
