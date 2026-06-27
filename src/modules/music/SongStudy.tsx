@@ -39,19 +39,35 @@ export function SongStudy() {
     setFetching(true)
     setInfo(null)
     try {
-      const res = await fetchLyrics(apiKey, song.title, song.snippet)
-      if (!res || res === LYRICS_NOT_FOUND) {
+      const { identified, lyrics } = await fetchLyrics(
+        apiKey,
+        song.title,
+        song.snippet,
+      )
+      setLyricsDraft(lyrics)
+      const patch: { lyrics: string; title?: string } = { lyrics }
+      if (
+        identified &&
+        identified.toLowerCase() !== song.title.trim().toLowerCase()
+      ) {
+        patch.title = identified
+      }
+      await updateSong(song.id, patch)
+      setInfo({
+        kind: 'success',
+        text: patch.title
+          ? `Encontrei: ${identified}. Letra salva.`
+          : 'Letra encontrada e salva.',
+      })
+    } catch (e) {
+      if (e instanceof Error && e.message === LYRICS_NOT_FOUND) {
         setInfo({
           kind: 'error',
-          text: 'Não consegui identificar a música. Ajuste o nome/trecho ou cole a letra manualmente.',
+          text: 'Não achei essa música. Tente colar um trecho real da letra (uma linha que você lembra) — isso ajuda mais que o nome.',
         })
       } else {
-        setLyricsDraft(res)
-        await updateSong(song.id, { lyrics: res })
-        setInfo({ kind: 'success', text: 'Letra encontrada e salva.' })
+        setInfo({ kind: 'error', text: 'Erro ao buscar a letra.' })
       }
-    } catch {
-      setInfo({ kind: 'error', text: 'Erro ao buscar a letra.' })
     } finally {
       setFetching(false)
     }

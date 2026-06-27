@@ -29,7 +29,7 @@ export function FolderView() {
     : 'Músicas sem pasta'
 
   async function addSong() {
-    if (!title.trim() || !snippet.trim()) return
+    if (!title.trim()) return
     const id = await createSong(folderId, title, snippet)
     setTitle('')
     setSnippet('')
@@ -62,7 +62,7 @@ export function FolderView() {
 
       <section className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-ink-800 p-4">
         <h2 className="font-medium text-white">Adicionar música</h2>
-        <Field label="Nome da música">
+        <Field label="Nome da música" hint="Pode ser aproximado — não precisa ser exato.">
           <Input
             placeholder="Ex.: Bohemian Rhapsody"
             value={title}
@@ -71,7 +71,7 @@ export function FolderView() {
         </Field>
         <Field
           label="Trecho ou refrão"
-          hint="Uma linha conhecida ajuda a IA a identificar a música certa."
+          hint="O que mais ajuda a achar a música: cole uma linha real da letra (um verso que você lembra)."
         >
           <Input
             placeholder="Ex.: Is this the real life? Is this just fantasy?"
@@ -80,10 +80,7 @@ export function FolderView() {
           />
         </Field>
         <div>
-          <Button
-            onClick={() => void addSong()}
-            disabled={!title.trim() || !snippet.trim()}
-          >
+          <Button onClick={() => void addSong()} disabled={!title.trim()}>
             Adicionar e abrir
           </Button>
         </div>
