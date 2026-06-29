@@ -37,6 +37,25 @@ export interface Song {
   updatedAt: number
 }
 
+/**
+ * Uma situação personalizada que o usuário descreve (por texto ou voz) e quer
+ * treinar (Módulo "Situação personalizada"). O cenário estruturado gerado pela
+ * IA fica cacheado aqui para não regerar a cada visita.
+ */
+export interface Situation {
+  id: string
+  /** título curto exibido na lista (gerado pela IA ou derivado da descrição) */
+  title: string
+  /** descrição livre escrita/ditada pelo usuário (idioma livre, normalmente pt-BR) */
+  description: string
+  /** resumo do cenário em pt-BR para o usuário ler (papéis, objetivo, vocabulário) */
+  scenario?: string
+  /** instrução de foco em inglês passada ao tutor (cache do cenário) */
+  focus?: string
+  createdAt: number
+  updatedAt: number
+}
+
 /** Uma conversa, ligada a um módulo (dá o "histórico por módulo"). */
 export interface Conversation {
   id: string
@@ -66,6 +85,7 @@ export type EvcDatabase = Dexie & {
   secrets: EntityTable<SecretRecord, 'id'>
   folders: EntityTable<Folder, 'id'>
   songs: EntityTable<Song, 'id'>
+  situations: EntityTable<Situation, 'id'>
   conversations: EntityTable<Conversation, 'id'>
   messages: EntityTable<Message, 'id'>
 }
@@ -79,6 +99,12 @@ db.version(1).stores({
   songs: '&id, folderId, createdAt',
   conversations: '&id, moduleId, updatedAt',
   messages: '&id, conversationId, createdAt',
+})
+
+// v2: módulo "Situação personalizada" (situações descritas por texto/voz).
+// As demais tabelas são herdadas automaticamente da v1.
+db.version(2).stores({
+  situations: '&id, updatedAt',
 })
 
 /** Gera um id único (usado como chave primária das entidades). */

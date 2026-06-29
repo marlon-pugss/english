@@ -38,9 +38,11 @@ export function Onboarding() {
       await validateApiKey(apiKey.trim())
       await saveApiKey(apiKey.trim(), usePin ? pin : undefined)
       // status muda para 'ready' e o AppGate troca de tela automaticamente.
-    } catch {
+    } catch (err) {
       setError(
-        'Não foi possível validar a chave. Verifique se ela está correta e ativa no Google AI Studio.',
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível validar a chave. Verifique se ela está correta e ativa no Google AI Studio.',
       )
     } finally {
       setBusy(false)

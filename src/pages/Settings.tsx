@@ -152,8 +152,14 @@ function ApiKeySection({
       setEditing(false)
       setKey('')
       setPin('')
-    } catch {
-      setMsg({ kind: 'error', text: 'Chave inválida. Verifique e tente novamente.' })
+    } catch (err) {
+      setMsg({
+        kind: 'error',
+        text:
+          err instanceof Error
+            ? err.message
+            : 'Chave inválida. Verifique e tente novamente.',
+      })
     } finally {
       setBusy(false)
     }
